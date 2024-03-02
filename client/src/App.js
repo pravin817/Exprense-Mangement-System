@@ -1,8 +1,13 @@
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+
 function App() {
   return (
-    <div className="container-fluid">
-      <h1 className="text-center">Hello</h1>
-    </div>
+    <>
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+      </Routes>
+    </>
   );
 }
 
