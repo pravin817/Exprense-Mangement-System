@@ -18,9 +18,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 // routes
-app.get("/", (req, res) => {
-  res.send("The server is running");
-});
+app.use("/api/v1/users", require("./routes/userRoute"));
 
 // Get the PORT
 const PORT = process.env.PORT || 8080;
