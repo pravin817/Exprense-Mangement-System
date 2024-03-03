@@ -1,6 +1,6 @@
 import { Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Spinner from "../components/Spinner";
 
@@ -18,7 +18,7 @@ const Login = () => {
       if (res.data.success) {
         localStorage.setItem(
           "user",
-          JSON.stringify({ ...res.data, password: "" })
+          JSON.stringify({ ...res.data.user, password: "" })
         );
         message.success("User login successfully");
         navigate("/");
@@ -31,6 +31,14 @@ const Login = () => {
       message.error("Something went wrong");
     }
   };
+
+  //   Prevent the user registration if it is already login
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   return (
     <>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
 
 const Register = () => {
@@ -28,6 +28,14 @@ const Register = () => {
       message.error("Invalid username or password!!");
     }
   };
+
+  //   Prevent the user registration if it is already login
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   return (
     <>
