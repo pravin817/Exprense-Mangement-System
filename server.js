@@ -18,7 +18,8 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 // routes
-app.use("/api/v1/users", require("./routes/userRoute"));
+app.use("/api/v1/users", require("./routes/userRoute")); // User
+app.use("/api/v1/transaction", require("./routes/transactionRoute")); // Transaction
 
 // Get the PORT
 const PORT = process.env.PORT || 8080;
