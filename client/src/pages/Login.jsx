@@ -33,7 +33,7 @@ const Login = () => {
   };
 
   //   Prevent the user registration if it is already login
-
+  
   useEffect(() => {
     if (localStorage.getItem("user")) {
       navigate("/");

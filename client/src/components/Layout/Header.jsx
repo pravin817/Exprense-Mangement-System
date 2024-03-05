@@ -9,7 +9,6 @@ const Header = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-
     if (user) {
       setLoginUser(user);
     }
@@ -20,7 +19,7 @@ const Header = () => {
     console.log("Logging out...");
     localStorage.removeItem("user");
     message.success("Logout successful");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
