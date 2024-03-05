@@ -1,13 +1,23 @@
 import Layout from "../components/Layout/Layout";
 import { useState, useEffect } from "react";
-import { Button, Form, Input, Modal, Select, Table, message } from "antd";
+import { Form, Input, Modal, Select, Table, message, DatePicker } from "antd";
 import axios from "axios";
 import Spinner from "../components/Spinner";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import
+
+const { RangePicker } = DatePicker;
 
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [allTransactions, setAllTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [frequency, setFrequency] = useState("7");
+  const [selectedDate, setSelectedDate] = useState([]);
+  const [type, setType] = useState("all");
+
+  const navigate = useNavigate();
 
   const handleOk = () => {
     setShowModal(false);
@@ -17,31 +27,36 @@ const Home = () => {
     setShowModal(false);
   };
 
-  // Get All transactions of the user
-  const getAllTransactions = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      setLoading(true);
-      const res = await axios.post("/transaction/get-transaction", {
-        userId: user._id,
-      });
-
-      setLoading(false);
-
-      if (res.data.success) {
-        setAllTransactions(res.data.data);
-        console.log(res.data.data);
-      }
-    } catch (error) {
-      console.log(error);
-      message.error("Error while fetching the transactions");
-    }
-  };
-
   // Get all transaction data
   useEffect(() => {
+    // Get All transactions of the user
+    const getAllTransactions = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        setLoading(true);
+        const res = await axios.post("/transaction/get-transaction", {
+          userId: user._id,
+          frequency,
+          selectedDate,
+          type,
+        });
+
+        setLoading(false);
+
+        if (res.data.success) {
+          setAllTransactions(res.data.data);
+          console.log(res.data.data);
+        } else {
+          message.error(res.data.message);
+        }
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+        // message.error("Error while fetching the transactions");
+      }
+    };
     getAllTransactions();
-  }, []);
+  }, [frequency, selectedDate, type]);
 
   // Handle form submit
   const handleSubmit = async (values) => {
@@ -63,6 +78,7 @@ const Home = () => {
       }
 
       setShowModal(false);
+      window.location.reload();
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -76,6 +92,9 @@ const Home = () => {
     {
       title: "Date",
       dataIndex: "date",
+      render: (text, record) => (
+        <span>{moment(text).format("DD-MM-YYYY")}</span>
+      ),
     },
     {
       title: "Amount",
@@ -102,7 +121,40 @@ const Home = () => {
     <Layout>
       {loading && <Spinner />}
       <div className="filters">
-        <div>Range Filters</div>
+        <div>
+          <h6>Select Frequency</h6>
+          <Select value={frequency} onChange={(values) => setFrequency(values)}>
+            <Select.Option value="7">LAST 1 Week</Select.Option>
+            <Select.Option value="30">LAST 1 Month</Select.Option>
+            <Select.Option value="365">LAST 1 Year</Select.Option>
+            <Select.Option value="custom">Custom</Select.Option>
+          </Select>
+
+          {/* Show conditionally RangePicker  */}
+          {frequency === "custom" && (
+            <RangePicker
+              value={selectedDate}
+              onChange={(values) => setSelectedDate(values)}
+            />
+          )}
+        </div>
+
+        <div>
+          <h6>Select Type</h6>
+          <Select value={type} onChange={(values) => setType(values)}>
+            <Select.Option value="all">ALL</Select.Option>
+            <Select.Option value="income">Income</Select.Option>
+            <Select.Option value="expense">Expense</Select.Option>
+          </Select>
+
+          {/* Show conditionally RangePicker  */}
+          {frequency === "custom" && (
+            <RangePicker
+              value={selectedDate}
+              onChange={(values) => setSelectedDate(values)}
+            />
+          )}
+        </div>
         <div>
           <button
             className="btn btn-primary"

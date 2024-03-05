@@ -1,10 +1,24 @@
 const transactionModel = require("../models/transactionModel");
-
+const moment = require("moment");
 // Get the list of the all transactions
 const getAllTransactionsController = async (req, res) => {
   try {
+    const { frequency, selectedDate, type } = req.body;
     const transactions = await transactionModel.find({
+      ...(frequency !== "custom"
+        ? {
+            date: {
+              $gt: moment().subtract(Number(frequency), "d").toDate(),
+            },
+          }
+        : {
+            date: {
+              $gte: selectedDate[0],
+              $lte: selectedDate[1],
+            },
+          }),
       userId: req.body.userId,
+      ...(type !== "all" && { type }),
     });
 
     if (transactions.length > 0) {
@@ -16,7 +30,7 @@ const getAllTransactionsController = async (req, res) => {
     } else {
       res.status(404).send({
         message: "No transaction found",
-        success: true,
+        success: false,
         data: transactions,
       });
     }
