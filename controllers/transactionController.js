@@ -3,7 +3,9 @@ const transactionModel = require("../models/transactionModel");
 // Get the list of the all transactions
 const getAllTransactionsController = async (req, res) => {
   try {
-    const transactions = await transactionModel.find({});
+    const transactions = await transactionModel.find({
+      userId: req.body.userId,
+    });
 
     if (transactions.length > 0) {
       res.status(200).send({

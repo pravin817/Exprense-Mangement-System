@@ -22,3 +22,12 @@
   border-radius: 5px;
   /* padding: 20px; */
 }
+
+/* Transaction page  */
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  box-shadow: 0 0 3px gray;
+}

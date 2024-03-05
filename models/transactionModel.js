@@ -2,9 +2,17 @@ const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema(
   {
+    userId: {
+      type: String,
+      required: [true],
+    },
     amount: {
       type: Number,
       required: [true, "Transaction amount is required"],
+    },
+    type: {
+      type: String,
+      required: [true, "Transaction type is required"],
     },
     category: {
       type: String,

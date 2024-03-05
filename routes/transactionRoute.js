@@ -13,5 +13,5 @@ const router = express.Router();
 router.post("/add-transaction", addTransactionsController);
 
 //get Transactions || GET
-router.get("/get-transaction", getAllTransactionsController);
+router.post("/get-transaction", getAllTransactionsController);
 module.exports = router;
