@@ -31,3 +31,23 @@
   padding: 15px 20px;
   box-shadow: 0 0 3px gray;
 }
+
+/* The antdesign icons */
+.anticon svg {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.active-icon {
+  color: black;
+}
+
+.inactive-icon {
+  color: gray;
+}
+
+.switch-icons {
+  border: 1px solid rgba(16, 2, 2, 0.607);
+  padding: 5px;
+  border-radius: 5px;
+}

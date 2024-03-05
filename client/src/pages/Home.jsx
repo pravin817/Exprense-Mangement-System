@@ -5,7 +5,8 @@ import axios from "axios";
 import Spinner from "../components/Spinner";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import
+import { UnorderedListOutlined, AreaChartOutlined } from "@ant-design/icons";
+import Analytics from "../components/Analytics";
 
 const { RangePicker } = DatePicker;
 
@@ -16,6 +17,7 @@ const Home = () => {
   const [frequency, setFrequency] = useState("7");
   const [selectedDate, setSelectedDate] = useState([]);
   const [type, setType] = useState("all");
+  const [viewData, setViewData] = useState("table");
 
   const navigate = useNavigate();
 
@@ -155,6 +157,20 @@ const Home = () => {
             />
           )}
         </div>
+        <div className="mx-2 switch-icons">
+          <UnorderedListOutlined
+            className={`mx-2 ${
+              viewData === "table" ? "active-icon" : "inactive-icon"
+            }`}
+            onClick={() => setViewData("table")}
+          />
+          <AreaChartOutlined
+            className={`mx-2 ${
+              viewData === "chart" ? "active-icon" : "inactive-icon"
+            }`}
+            onClick={() => setViewData("chart")}
+          />
+        </div>
         <div>
           <button
             className="btn btn-primary"
@@ -164,9 +180,15 @@ const Home = () => {
           </button>
         </div>
       </div>
-      <div className="content container mt-2">
-        <Table columns={columns} dataSource={allTransactions} />
-      </div>
+      {/* Table and charts based on the condition - i.e conditional rendering */}
+
+      {viewData === "table" ? (
+        <div className="content container mt-2">
+          <Table columns={columns} dataSource={allTransactions} />
+        </div>
+      ) : (
+        <Analytics allTransactions={allTransactions} />
+      )}
       <Modal
         title="Add Transaction"
         open={showModal}
