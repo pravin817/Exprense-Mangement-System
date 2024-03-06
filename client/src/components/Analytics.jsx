@@ -1,6 +1,19 @@
 import { Progress } from "antd";
 
 const Analytics = ({ allTransactions }) => {
+  // Categories
+
+  const categories = [
+    "salary",
+    "tip",
+    "project",
+    "food",
+    "movies",
+    "bills",
+    "medical",
+    "fee",
+    "tax",
+  ];
   // Total Transactions
   const totalTransaction = allTransactions.length;
   const totalIncomeTransaction = allTransactions.filter(
@@ -93,6 +106,63 @@ const Analytics = ({ allTransactions }) => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="row mt-3">
+        <div className="col-md-5">
+          <h4>Categorywise Income</h4>
+          {categories.map((category) => {
+            const amount = allTransactions
+              .filter(
+                (transaction) =>
+                  transaction.type === "income" &&
+                  transaction.category === category
+              )
+              .reduce((acc, transaction) => acc + transaction.amount, 0);
+
+            return (
+              amount > 0 && (
+                <div className="card">
+                  <div className="card-body">
+                    <h5>{category} </h5>
+                    <Progress
+                      percent={((amount / totalIncomeTurnover) * 100).toFixed(
+                        0
+                      )}
+                    />
+                  </div>
+                </div>
+              )
+            );
+          })}
+        </div>
+
+        <div className="col-md-5">
+          <h4>Categorywise Expense</h4>
+          {categories.map((category) => {
+            const amount = allTransactions
+              .filter(
+                (transaction) =>
+                  transaction.type === "expense" &&
+                  transaction.category === category
+              )
+              .reduce((acc, transaction) => acc + transaction.amount, 0);
+
+            return (
+              amount > 0 && (
+                <div className="card">
+                  <div className="card-body">
+                    <h5>{category} </h5>
+                    <Progress
+                      percent={((amount / totalExpenseTurnover) * 100).toFixed(
+                        0
+                      )}
+                    />
+                  </div>
+                </div>
+              )
+            );
+          })}
         </div>
       </div>
     </>
